@@ -1,0 +1,21 @@
+{
+	"name" : "kristo/kikopolis-mvc",
+	"description" : "MVC Test-framework",
+	"authors" : [
+		{
+			"name" : "Kristo Leas",
+			"email" : "kristo.leas@gmail.com"
+		}
+	],
+	"require" : {
+		"phpunit/phpunit": "^9.5"
+	},
+	"autoload" : {
+		"psr-4" : {
+			"Kikopolis\\" : "./"
+		}
+	},
+	"require-dev": {
+		"dg/bypass-finals": "^1.3"
+	}
+}
