@@ -2,19 +2,12 @@
 
 declare(strict_types = 1);
 
-namespace tests\Core;
+namespace Tests\Core;
 
 use Closure;
 use Kikopolis\Core\Router;
 use PHPUnit\Framework\TestCase;
-use function count;
-use function var_dump;
 
-/**
- * Class RouterTest
- * @package tests\Core
- * @author  Kristo Leas <kristo.leas@gmail.com>
- */
 final class RouterTest extends TestCase {
 	public function testRouterGetAcceptsClosure(): void {
 		$router = new Router();

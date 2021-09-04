@@ -6,11 +6,6 @@ namespace Kikopolis\Core;
 
 use Kikopolis\Core\Contracts\Router\RouterInterface;
 
-/**
- * Class Application
- * @package Kikopolis\Application
- * @author  Kristo Leas <kristo.leas@gmail.com>
- */
 final class Application {
 	private RouterInterface $router;
 	
