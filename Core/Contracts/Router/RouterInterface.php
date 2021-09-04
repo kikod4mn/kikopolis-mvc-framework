@@ -6,11 +6,12 @@ namespace Kikopolis\Core\Contracts\Router;
 
 use Closure;
 use Kikopolis\Core\Collection\Collection;
+use Kikopolis\Core\Request;
 
 interface RouterInterface {
-	public function get(string $uri, array|Closure $params = []): void;
+	public function add(string $uri, string $method, Closure|array|string $params = []): void;
 	
-	public function post(string $uri, array|Closure $params = []): void;
+	public function all(): Collection;
 	
-	public function getAll(): Collection;
+	public function resolve(Request $request);
 }

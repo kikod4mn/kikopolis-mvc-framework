@@ -12,5 +12,23 @@ use Closure;
  * @author  Kristo Leas <kristo.leas@gmail.com>
  */
 final class Route {
-	public function __construct(public string $uri, public string $method, public array $params = [], public ?Closure $callback = null) { }
+	public ?Closure $callback = null;
+	public ?string  $template = null;
+	public array    $params   = [];
+	
+	public function __construct(public string $uri, public string $method, array $params) {
+		$this->setParams($params);
+	}
+	
+	private function setParams(array $params): void {
+		if (isset($params['controller']) && isset($params['action'])) {
+			$this->params = $params;
+		}
+		if (isset($params['template'])) {
+			$this->template = $params['template'];
+		}
+		if (isset($params['callback'])) {
+			$this->callback = $params['callback'];
+		}
+	}
 }
