@@ -9,7 +9,8 @@
 	],
 	"require" : {
 		"phpunit/phpunit" : "^9.5",
-		"ext-mbstring" : "*"
+		"ext-mbstring" : "*",
+		"ext-fileinfo" : "*"
 	},
 	"autoload" : {
 		"psr-4" : {

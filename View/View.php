@@ -18,26 +18,28 @@ use function preg_quote;
 use function preg_replace;
 use function sprintf;
 use function str_replace;
+use function trim;
+use function var_dump;
 use const DIRECTORY_SEPARATOR;
 use const PREG_SET_ORDER;
 
 final class View implements RendererInterface {
-	private string $mergeDirective   = '/^@merge\((?P<template>[a-z\.]+)\)\s+?/';
-	private string $contentDirective = '/{{\s*?@content\s*?}}/';
-	private string $titleDirective   = '/{{\s*?@title\((?P<title>[\w+]+)\)\s*?}}/';
-	private string $file;
+	private string             $mergeDirective   = '/^@merge\((?P<template>[a-z\.]+)\)\s+?/';
+	private string             $contentDirective = '/{{\s*?@content\s*?}}/';
+	private string             $titleDirective   = '/{{\s*?@title\((?P<title>[\w+]+)\)\s*?}}/';
+	private TemplateFileLoader $templateLoader;
 	
-	public function file(string $file): self {
-		$this->file = $this->checkFileExists(sprintf("%s/resources/views/%s.php", Application::getProjectPath(), $file));
-		return $this;
+	public function __construct(TemplateFileLoader $templateLoader) {
+		$this->templateLoader = $templateLoader;
 	}
 	
-	public function render(?string $content = null): string {
-		if ($content === null && isset($this->file)) {
-			$content = file_get_contents($this->file);
-		}
+	public function render(string $name): string {
+		$content = $this->templateLoader->get($name);
 		preg_match_all($this->mergeDirective, $content, $mergeMatches, PREG_SET_ORDER);
-		if ($mergeMatches) {
+		if (count($mergeMatches) > 0) {
+			if (count($mergeMatches) > 1) {
+				throw new TooManyMergeDirectivesException($this->formatFullName($name));
+			}
 			$content = $this->mergeWithBase($content, $mergeMatches);
 		}
 		return $content;
@@ -45,29 +47,16 @@ final class View implements RendererInterface {
 	
 	// todo write a separate file loader so it would be possible to unit test View
 	private function mergeWithBase(string $content, array $mergeMatches): string {
-		if (count($mergeMatches) > 1) {
-			throw new TooManyMergeDirectivesException($this->file);
-		}
-		$parentFile     = $this->checkFileExists(
-			sprintf("%s/resources/views/%s.php", Application::getProjectPath(), $this->parseDot($mergeMatches[0]['template']))
-		);
-		$content        = preg_replace($this->mergeDirective, '', $content);
-		$parentContents = file_get_contents($parentFile);
+		$content        = trim(preg_replace($this->mergeDirective, '', $content));
+		$parentContents = $this->templateLoader->get($mergeMatches[0]['template']);
 		if (preg_match($this->mergeDirective, $parentContents)) {
-			throw new ParentTemplateCannotContainMergeDirectiveException($parentFile);
+			throw new ParentTemplateCannotContainMergeDirectiveException($this->formatFullName($mergeMatches[0]['template']));
 		}
-		$content = preg_replace($this->contentDirective, $content, $parentContents, 1);
-		return preg_replace($this->contentDirective, '', $content, 0);
+		$merged = preg_replace($this->contentDirective, $content, $parentContents, 1);
+		return preg_replace($this->contentDirective, '', $merged, 0);
 	}
 	
-	private function checkFileExists(string $file): string {
-		if (! file_exists($file)) {
-			throw new TemplateDoesNotExistException($file);
-		}
-		return $file;
-	}
-	
-	private function parseDot(string $raw): string {
-		return str_replace('.', DIRECTORY_SEPARATOR, $raw);
+	private function formatFullName(string $name): string {
+		return sprintf("%s%s%s", $this->templateLoader->getBaseDir(), DIRECTORY_SEPARATOR, $this->templateLoader->parseDot($name));
 	}
 }

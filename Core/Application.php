@@ -61,7 +61,7 @@ final class Application {
 			return;
 		}
 		if (isset($route->template)) {
-			echo $this->view->file($route->template)->render();
+			echo $this->view->render($route->template);
 			return;
 		}
 		throw new BadlyConfiguredRouteException();
