@@ -46,7 +46,7 @@ class ViewTest extends TestCase {
 		;;
 		$view  = new View($templateLoader);
 		$ready = $view->render('home');
-		ViewTest::assertTrue(str_contains($ready, '<title>Contact us</title>'));
+		ViewTest::assertTrue(str_contains($ready, 'Contact us'));
 		ViewTest::assertTrue(str_contains($ready, '<h1>Hi!</h1>'));
 	}
 }

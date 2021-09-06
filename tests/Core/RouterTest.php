@@ -17,7 +17,7 @@ final class RouterTest extends TestCase {
 	public function testGet(): void {
 		$router = new Router();
 		$router->get('/test', fn () => 'Test of closure');
-		$route = $router->all()['GET']['/test'];
+		$route = $router->resolve(new Request(['REQUEST_METHOD' => 'get', 'REQUEST_URI' => '/test']));
 		RouterTest::assertEquals('/test', $route->uri);
 		RouterTest::assertEquals('GET', $route->method);
 		RouterTest::assertEquals([], $route->params);
@@ -27,18 +27,18 @@ final class RouterTest extends TestCase {
 	/**
 	 * @dataProvider routerParamProvider
 	 */
-	public function testRouterParameterParsing(string $uri, string $method, Closure|array|string $params): void {
+	public function testRouterParameterParsing(string $uri, string $requestUri, string $method, Closure|array|string $params): void {
 		$router = new Router();
 		$router->add($uri, $method, $params);
 		$method = strtoupper($method);
-		$route  = $router->all()[$method][$uri];
+		$route  = $router->resolve(new Request(['REQUEST_METHOD' => $method, 'REQUEST_URI' => $requestUri]));
 		RouterTest::assertTrue($route->uri === $uri);
 		RouterTest::assertTrue($route->method === strtoupper($method));
 		if ($params instanceof Closure) {
 			RouterTest::assertEquals(42, call_user_func($route->callback));
 		} else {
 			if (is_array($params) || is_string($params) && str_contains($params, '@')) {
-				RouterTest::assertEquals(['controller' => 'App\\CoolController', 'action' => 'someMethod'], $route->params);
+				RouterTest::assertEquals(['controller' => 'App\\Controller\\CoolController', 'action' => 'actionMethod'], $route->params);
 			} else {
 				RouterTest::assertEquals($params, $route->template);
 			}
@@ -46,47 +46,73 @@ final class RouterTest extends TestCase {
 	}
 	
 	public function routerParamProvider(): Generator {
-		$controller = 'App\\CoolController';
-		$action     = 'someMethod';
-		yield [
-			'uri'    => 'route-home',
-			'method' => 'get',
-			'params' => 'App\\CoolController@someMethod',
+		$controllerWithNamespace = 'App\\Controller\\CoolController';
+		$action                  = 'actionMethod';
+		yield 'Test a fully namespaced controller with @ notation method as a string' => [
+			'uri'        => '/route-home',
+			'requestUri' => '/route-home',
+			'method'     => 'get',
+			'params'     => sprintf("%s@%s", $controllerWithNamespace, $action),
 		];
-		yield [
-			'uri'    => 'route-home',
-			'method' => 'get',
-			'params' => 'home',
+		yield 'Test a template file' => [
+			'uri'        => '/route-home',
+			'requestUri' => '/route-home',
+			'method'     => 'get',
+			'params'     => 'home',
 		];
-		yield [
-			'uri'    => '/route-home',
-			'method' => 'get',
-			'params' => [$controller, $action],
+		yield 'Test an array of [$controller, $action]' => [
+			'uri'        => '/route-home',
+			'requestUri' => '/route-home',
+			'method'     => 'get',
+			'params'     => [$controllerWithNamespace, $action],
 		];
-		yield [
-			'uri'    => '/route-home',
-			'method' => 'GET',
-			'params' => ['controller' => $controller, 'action' => $action],
+		yield 'Test an array of [$controller, $action] with named keys' => [
+			'uri'        => '/route-home',
+			'requestUri' => '/route-home',
+			'method'     => 'GET',
+			'params'     => ['controller' => $controllerWithNamespace, 'action' => $action],
 		];
-		yield [
-			'uri'    => '/route-home',
-			'method' => 'post',
-			'params' => fn () => 42,
+		yield 'Test a callback with 42 with POST' => [
+			'uri'        => '/route-home',
+			'requestUri' => '/route-home',
+			'method'     => 'post',
+			'params'     => fn () => 42,
 		];
-		yield [
-			'uri'    => '/route-home',
-			'method' => 'put',
-			'params' => fn () => 42,
+		yield 'Test a callback with 42 with PUT' => [
+			'uri'        => '/route-home',
+			'requestUri' => '/route-home',
+			'method'     => 'put',
+			'params'     => fn () => 42,
 		];
-		yield [
-			'uri'    => '/route-home',
-			'method' => 'patch',
-			'params' => fn () => 42,
+		yield 'Test a callback with 42 with PATCH' => [
+			'uri'        => '/route-home',
+			'requestUri' => '/route-home',
+			'method'     => 'patch',
+			'params'     => fn () => 42,
 		];
-		yield [
-			'uri'    => '/route-home',
-			'method' => 'delete',
-			'params' => fn () => 42,
+		yield 'Test a callback with 42 with DELETE' => [
+			'uri'        => '/route-home',
+			'requestUri' => '/route-home',
+			'method'     => 'delete',
+			'params'     => fn () => 42,
+		];
+		yield 'Test a query string with callback 42' => [
+			'uri'        => '/route-home',
+			'requestUri' => '/route-home&id=1',
+			'method'     => 'delete',
+			'params'     => fn () => 42,
+		];
+		yield 'Test that a controller without namespace gets the default namespace' => [
+			'uri'        => '/route-home',
+			'requestUri' => '/route-home&id=1',
+			'method'     => 'delete',
+			'params'     => ['CoolController', $action],
+		];
+		yield 'Test with multiple route parameters' => [
+			'uri'        => '/route-home/users/{id}/posts/{id}',
+			'requestUri' => '/route-home/users/42/posts/247',
+			'method'     => 'delete',
+			'params'     => ['CoolController', $action],
 		];
 	}
 	

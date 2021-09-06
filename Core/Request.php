@@ -28,7 +28,8 @@ final class Request {
 	
 	public function getPath(): string {
 		if (! isset($this->path)) {
-			$this->path = $this->parsePath($this->server['REQUEST_URI']);
+			$this->path = $this->server['REQUEST_URI'];
+//			$this->path = $this->parsePath($this->server['REQUEST_URI']);
 		}
 		return $this->path;
 	}
