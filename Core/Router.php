@@ -18,6 +18,7 @@ use Kikopolis\View\Exception\TemplateDoesNotExistException;
 use function array_shift;
 use function call_user_func;
 use function count;
+use function dd;
 use function in_array;
 use function mb_strcut;
 use function mb_strlen;
@@ -31,6 +32,7 @@ use function str_replace;
 use function strpos;
 use function strtoupper;
 use function trim;
+use function var_dump;
 
 final class Router implements RouterInterface {
 	const GET    = 'GET';
@@ -73,12 +75,11 @@ final class Router implements RouterInterface {
 	}
 	
 	private function match(Request $request): Route {
-//		var_dump($this->routes);
-//		die;
 		$matched = null;
+		$uri     = $this->removeQueryVariables($request);
 		/** @var Route $route */
 		foreach ($this->routes[$request->getMethod()]->toArray() as $regex => $route) {
-			if (preg_match($regex, $this->removeQueryVariables($request)) !== false) {
+			if (preg_match($regex, $uri) === 1) {
 				$matched = $route;
 			}
 		}
@@ -126,11 +127,8 @@ final class Router implements RouterInterface {
 	}
 	
 	public function parseUrlToRegex(string $url): string {
-		if ($url === '/' || $url === '') {
-			return '/^/$/i';
-		}
 		// Convert the route to a regular expression: escape forward slashes
-		$url = preg_replace('/\//', '\\/', rtrim($url, '/'));
+		$url = preg_replace('/\//', '\\/', $url);
 		// Convert variables e.g. {id}, {slug} to capture groups
 		$url = preg_replace('/{([a-z]+)}/', '(?P<\1>[a-zA-Z0-9-_]+)', $url);
 		// Add start and end delimiters, and case-insensitive flag
@@ -163,13 +161,13 @@ final class Router implements RouterInterface {
 		if (str_contains($request, '&')) {
 			$request = str_replace('&', '?', $request);
 		}
-		if (isset($request) && $request !== '') {
+		if (! isset($request) || $request === '' || $request === '/') {
+			return '/';
+		} else {
 			if (str_contains($request, '?')) {
 				return mb_strcut($request, 0, mb_strpos($request, '?'));
 			}
 			return $request;
-		} else {
-			return '/';
 		}
 	}
 	

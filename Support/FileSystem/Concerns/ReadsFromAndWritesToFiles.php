@@ -6,9 +6,12 @@ namespace Kikopolis\Support\FileSystem\Concerns;
 
 use Kikopolis\Support\Exception\FileNotFoundException;
 use Kikopolis\Support\FileSystem;
+use function dirname;
 use function file_get_contents;
 use function file_put_contents;
+use function mkdir;
 use function sprintf;
+use function touch;
 use const FILE_APPEND;
 use const LOCK_EX;
 
@@ -21,7 +24,18 @@ trait ReadsFromAndWritesToFiles {
 	}
 	
 	public static function write(string $path, string $content): bool {
-		return file_put_contents($path, $content, LOCK_EX);
+		if (! FileSystem::exists($path)) {
+			// If the filename includes a dot, assume we deal with a file and not a directory
+			if (str_contains($path, '.')) {
+				// If directory exists, we do not need to create it
+				if (! FileSystem::exists(dirname($path))) {
+					mkdir(dirname($path), 0755, true);
+				}
+			} else {
+				mkdir($path, 0755, true);
+			}
+		}
+		return (bool) file_put_contents($path, $content, LOCK_EX);
 	}
 	
 	public static function append(string $path, string $content): bool {

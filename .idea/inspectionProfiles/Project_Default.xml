@@ -31,6 +31,7 @@
       <option name="CHECK_FIELD" value="true" />
     </inspection_tool>
     <inspection_tool class="PhpMissingStrictTypesDeclarationInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpNoReturnAttributeCanBeAddedInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="PhpPropertyNamingConventionInspection" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="m_minLength" value="2" />
       <option name="m_maxLength" value="25" />

@@ -16,7 +16,10 @@
 		"psr-4" : {
 			"Kikopolis\\" : "./",
 			"Tests\\" : "./tests"
-		}
+		},
+		"files" : [
+			"./Support/helpers.php"
+		]
 	},
 	"require-dev" : {
 		"dg/bypass-finals" : "^1.3"

@@ -5,11 +5,15 @@ declare(strict_types = 1);
 namespace Kikopolis\Core;
 
 use Kikopolis\Core\Router\Exception\InvalidRouteMethodException;
+use function dd;
+use function filter_input;
 use function mb_strcut;
 use function mb_strpos;
 use function str_contains;
 use function str_replace;
 use function strtoupper;
+use const FILTER_SANITIZE_SPECIAL_CHARS;
+use const INPUT_GET;
 
 final class Request {
 	const GET    = 'GET';
@@ -22,8 +26,8 @@ final class Request {
 	private string $method;
 	private array  $server;
 	
-	public function __construct(array $server) {
-		$this->server = $server;
+	public function __construct(array $server = []) {
+		$this->server = $server === [] ? $_SERVER : $server;
 	}
 	
 	public function getPath(): string {
@@ -41,22 +45,19 @@ final class Request {
 		return $this->method;
 	}
 	
-	public function getBody() {
-	
-	}
-	
-	private function parsePath(string $path): string {
-		if (str_contains($path, '&')) {
-			$path = str_replace('&', '?', $path);
-		}
-		if (isset($path) && $path !== '') {
-			if (str_contains($path, '?')) {
-				return mb_strcut($path, 0, mb_strpos($path, '?'));
+	public function getBody(): array {
+		$body = [];
+		if ($this->getMethod() === Request::GET) {
+			foreach ($_GET as $key => $value) {
+				$body[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
 			}
-			return $path;
-		} else {
-			return '/';
 		}
+		if ($this->getMethod() === Request::POST) {
+			foreach ($_POST as $key => $value) {
+				$body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+			}
+		}
+		return $body;
 	}
 	
 	private function parseMethod(string $method): string {

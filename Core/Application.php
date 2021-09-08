@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Kikopolis\Core;
 
+use Exception;
 use Kikopolis\Core\Contracts\Router\RouterInterface;
 use Kikopolis\Core\Exception\ControllerNotFoundException;
 use Kikopolis\Core\Router\Exception\BadlyConfiguredRouteException;
@@ -13,18 +14,19 @@ use Kikopolis\View\TemplateFileLoader;
 use Kikopolis\View\View;
 use Throwable;
 use function call_user_func;
-use function call_user_method;
 use function class_exists;
 use function file_exists;
 use function file_get_contents;
 use function method_exists;
 use function sprintf;
+use function var_dump;
 
 final class Application {
 	private RouterInterface    $router;
 	private Request            $request;
 	private View               $view;
 	private ?Response          $response    = null;
+	private Container          $container;
 	private static Application $app;
 	private static string      $projectPath = '';
 	
@@ -34,10 +36,15 @@ final class Application {
 		$this->router      = new Router();
 		$this->view        = new View(new TemplateFileLoader());
 		$this->request     = new Request($_SERVER);
+		$this->container   = new Container();
 	}
 	
 	public function getRouter(): RouterInterface {
 		return $this->router;
+	}
+	
+	public function getView(): View {
+		return $this->view;
 	}
 	
 	public function getRequest(): Request {
@@ -51,11 +58,14 @@ final class Application {
 		return $this->response;
 	}
 	
-	public function run() {
-//		ob_start();
+	public function getContainer(): Container {
+		return $this->container;
+	}
+	
+	public function run(): Response {
 		try {
-			$this->handleRoute($this->router->resolve($this->request));
-		} catch (Throwable $e) {
+			return $this->handleRoute($this->router->resolve($this->request));
+		} catch (Exception $e) {
 			if (Application::isDev() || Application::isDebug()) {
 				throw new $e;
 			}
@@ -63,18 +73,20 @@ final class Application {
 			echo $this->view->render('errors.404');
 			return $this->createResponse(404);
 		}
-//		return ob_get_clean();
 	}
 	
-	public function handleRoute(Route $route): void {
+	public static function getApp(): Application {
+		return self::$app;
+	}
+	
+	public function handleRoute(Route $route): Response {
 		// Priority if conflicting items are set - Callback, Controller, Template
 		if (isset($route->callback)) {
-			call_user_func($route->callback);
-			return;
+			return (new Response())->setContent(call_user_func($route->callback));
 		}
 		if (isset($route->params['controller']) && ! isset($route->params['action'])) {
 			//todo dep-injection with invokable controller
-			return;
+			return new Response();
 		}
 		if (isset($route->params['controller']) && isset($route->params['action'])) {
 			//todo dep-injection with regular controller and method
@@ -83,18 +95,14 @@ final class Application {
 					sprintf('Controller "%s" or method "%s" does not exist.', $route->params['controller'], $route->params['action'])
 				);
 			}
-			call_user_func([new $route->params['controller'](), $route->params['action']]);
-			return;
+			$controller   = $this->getContainer()->get($route->params['controller']);
+			$methodParams = $this->getContainer()->getMethodParameters($controller, $route->params['action']) ?? [];
+			return call_user_func([$controller, $route->params['action']], $methodParams);
 		}
 		if (isset($route->template)) {
-			echo $this->view->render($route->template);
-			return;
+			return (new Response())->setContent($this->view->render($route->template));
 		}
 		throw new BadlyConfiguredRouteException();
-	}
-	
-	public static function getApp(): Application {
-		return self::$app;
 	}
 	
 	public static function getProjectPath(): string {

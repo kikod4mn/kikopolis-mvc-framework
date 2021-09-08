@@ -18,7 +18,7 @@ class ViewTest extends TestCase {
 					   ->willReturnOnConsecutiveCalls("@merge(layouts.main)\n\r<h1>Hi!</h1>", '<title>A TITLE</title>{{ @content }}')
 		;;
 		$view  = new View($templateLoader);
-		$ready = $view->render('home');
+		$ready = $view->compile('home');
 		ViewTest::assertFalse(str_contains($ready, '@merge'));
 		ViewTest::assertFalse(str_contains($ready, '{{ @content }}'));
 		ViewTest::assertTrue(str_contains($ready, '<title>A TITLE</title>'));
@@ -33,7 +33,7 @@ class ViewTest extends TestCase {
 					   ->willReturn("<h1>Hi!</h1>")
 		;;
 		$view  = new View($templateLoader);
-		$ready = $view->render('home');
+		$ready = $view->compile('home');
 		ViewTest::assertTrue(str_contains($ready, '<h1>Hi!</h1>'));
 	}
 	
@@ -45,7 +45,7 @@ class ViewTest extends TestCase {
 					   ->willReturn("{{ @title(Contact us) }}<h1>Hi!</h1>")
 		;;
 		$view  = new View($templateLoader);
-		$ready = $view->render('home');
+		$ready = $view->compile('home');
 		ViewTest::assertTrue(str_contains($ready, 'Contact us'));
 		ViewTest::assertTrue(str_contains($ready, '<h1>Hi!</h1>'));
 	}

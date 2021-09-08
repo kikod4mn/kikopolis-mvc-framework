@@ -6,21 +6,28 @@ namespace Kikopolis\View;
 
 use Kikopolis\Core\Application;
 use Kikopolis\Core\Contracts\RendererInterface;
+use Kikopolis\Support\FileSystem;
 use Kikopolis\View\Exception\ParentTemplateCannotContainMergeDirectiveException;
 use Kikopolis\View\Exception\TemplateDoesNotExistException;
 use Kikopolis\View\Exception\TooManyMergeDirectivesException;
 use function count;
+use function extract;
 use function file_exists;
 use function file_get_contents;
+use function ob_get_clean;
+use function ob_get_flush;
+use function ob_start;
 use function preg_match;
 use function preg_match_all;
 use function preg_quote;
 use function preg_replace;
 use function sprintf;
 use function str_replace;
+use function time;
 use function trim;
 use function var_dump;
 use const DIRECTORY_SEPARATOR;
+use const EXTR_OVERWRITE;
 use const PREG_SET_ORDER;
 
 final class View implements RendererInterface {
@@ -33,7 +40,18 @@ final class View implements RendererInterface {
 		$this->templateLoader = $templateLoader;
 	}
 	
-	public function render(string $name): string {
+	public function render(string $name, array $params = []): string {
+		// Insert to cached file
+		$filename = Application::getProjectPath() . '/var/cache/' . time() . '.php';
+		$file     = FileSystem::write(Application::getProjectPath() . '/var/cache/' . time() . '.php', $this->compile($name));
+		extract($params, EXTR_OVERWRITE);
+		ob_start();
+		// Require the cached file
+		require_once $filename;
+		return ob_get_flush();
+	}
+	
+	public function compile(string $name): string {
 		$content = $this->templateLoader->get($name);
 		// Check for existence of a merge directive and ensure only one is in the template.
 		preg_match_all($this->mergeDirective, $content, $mergeMatches, PREG_SET_ORDER);

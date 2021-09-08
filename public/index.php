@@ -9,7 +9,8 @@ use Kikopolis\Core\Application;
 
 $app = new Application(dirname(__DIR__));
 $app->getRouter()->get('/', [Controller::class, 'home']);
-$app->getRouter()->get('/contact', 'contact');
-$app->getRouter()->get('/pricing', 'pricing');
+$app->getRouter()->get('/contact', [Controller::class, 'contact']);
+$app->getRouter()->post('/contact', [Controller::class, 'handleContact']);
+$app->getRouter()->get('/pricing', [Controller::class, 'pricing']);
 
 $app->run();

@@ -10,6 +10,7 @@ use Kikopolis\Core\Request;
 use Kikopolis\Core\Router;
 use PHPUnit\Framework\TestCase;
 use function is_string;
+use function sprintf;
 use function str_contains;
 use function strtoupper;
 
@@ -48,6 +49,12 @@ final class RouterTest extends TestCase {
 	public function routerParamProvider(): Generator {
 		$controllerWithNamespace = 'App\\Controller\\CoolController';
 		$action                  = 'actionMethod';
+		yield 'Test an empty uri' => [
+			'uri'        => '/',
+			'requestUri' => '',
+			'method'     => 'get',
+			'params'     => sprintf("%s@%s", $controllerWithNamespace, $action),
+		];
 		yield 'Test a fully namespaced controller with @ notation method as a string' => [
 			'uri'        => '/route-home',
 			'requestUri' => '/route-home',
@@ -109,7 +116,7 @@ final class RouterTest extends TestCase {
 			'params'     => ['CoolController', $action],
 		];
 		yield 'Test with multiple route parameters' => [
-			'uri'        => '/route-home/users/{id}/posts/{id}',
+			'uri'        => '/route-home/users/{user}/posts/{post}',
 			'requestUri' => '/route-home/users/42/posts/247',
 			'method'     => 'delete',
 			'params'     => ['CoolController', $action],
