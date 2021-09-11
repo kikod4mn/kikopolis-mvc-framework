@@ -9,30 +9,23 @@ use Kikopolis\Core\Collection\Collection;
 use Kikopolis\Core\Collection\MixedCollection;
 use Kikopolis\Core\Collection\RouteCollection;
 use Kikopolis\Core\Contracts\Router\RouterInterface;
-use Kikopolis\Core\Router\Exception\BadlyConfiguredRouteException;
 use Kikopolis\Core\Router\Exception\InvalidRouteMethodException;
 use Kikopolis\Core\Router\Exception\NoRouteMatchException;
 use Kikopolis\Core\Router\Route;
 use Kikopolis\Support\Arr;
-use Kikopolis\View\Exception\TemplateDoesNotExistException;
 use function array_shift;
-use function call_user_func;
 use function count;
-use function dd;
 use function in_array;
 use function mb_strcut;
 use function mb_strlen;
 use function mb_strpos;
 use function preg_match;
 use function preg_replace;
-use function rtrim;
 use function sprintf;
 use function str_contains;
 use function str_replace;
 use function strpos;
 use function strtoupper;
-use function trim;
-use function var_dump;
 
 final class Router implements RouterInterface {
 	const GET    = 'GET';
@@ -44,7 +37,6 @@ final class Router implements RouterInterface {
 	private Collection $routes;
 	private array      $routeParamNames = ['controller', 'action'];
 	private array      $routeMethods    = [self::GET, self::POST, self::PUT, self::PATCH, self::DELETE];
-	private string     $namespace       = 'App\\Controller\\';
 	
 	public function __construct() {
 		$this->routes = new MixedCollection();
@@ -151,7 +143,7 @@ final class Router implements RouterInterface {
 		if (str_contains($controller, '\\')) {
 			return $controller;
 		}
-		return sprintf("%s%s", $this->namespace, $controller);
+		return sprintf("%s%s", Config::controllerNamespace(), $controller);
 	}
 	
 	private function removeQueryVariables(string|Request $request): string {

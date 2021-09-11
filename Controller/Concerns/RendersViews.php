@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Kikopolis\Controller\Concerns;
+namespace App\Controller\Concerns;
 
 use Kikopolis\Core\Application;
 use Kikopolis\Core\Response;

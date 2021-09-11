@@ -9,33 +9,6 @@ use Kikopolis\Core\Request;
 use PHPUnit\Framework\TestCase;
 
 final class RequestTest extends TestCase {
-//	/**
-//	 * @dataProvider getPathProvider
-//	 */
-//	public function testGetPath(string $path, string $expected): void {
-//		$request = new Request(['REQUEST_URI' => $path, 'REQUEST_METHOD' => 'GET']);
-//		RequestTest::assertEquals($expected, $request->getPath());
-//	}
-//
-//	public function getPathProvider(): Generator {
-//		yield [
-//			'path'     => '/test',
-//			'expected' => '/test',
-//		];
-//		yield [
-//			'path'     => '/test?id=1',
-//			'expected' => '/test',
-//		];
-//		yield [
-//			'path'     => '/test&user=kiko?id=1',
-//			'expected' => '/test',
-//		];
-//		yield [
-//			'path'     => '',
-//			'expected' => '/',
-//		];
-//	}
-	
 	/**
 	 * @dataProvider getMethodProvider
 	 */
@@ -52,6 +25,44 @@ final class RequestTest extends TestCase {
 		yield [
 			'method'   => 'post',
 			'expected' => 'POST',
+		];
+	}
+	
+	/**
+	 * @dataProvider isGetProvider
+	 */
+	public function testIsGet(string $method, bool $expected): void {
+		$request = new Request(['REQUEST_METHOD' => $method]);
+		RequestTest::assertEquals($expected, $request->isGet());
+	}
+	
+	public function isGetProvider(): Generator {
+		yield [
+			'method'   => 'get',
+			'expected' => true,
+		];
+		yield [
+			'method'   => 'post',
+			'expected' => false,
+		];
+	}
+	
+	/**
+	 * @dataProvider isPostProvider
+	 */
+	public function testIsPost(string $method, bool $expected): void {
+		$request = new Request(['REQUEST_METHOD' => $method]);
+		RequestTest::assertEquals($expected, $request->isPost());
+	}
+	
+	public function isPostProvider(): Generator {
+		yield [
+			'method'   => 'get',
+			'expected' => false,
+		];
+		yield [
+			'method'   => 'post',
+			'expected' => true,
 		];
 	}
 }

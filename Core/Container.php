@@ -12,6 +12,7 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 use function class_exists;
+use function config;
 use function count;
 use function is_string;
 use function sprintf;
@@ -20,13 +21,11 @@ final class Container {
 	private MixedCollection $services;
 	
 	public function __construct() {
-		$this->services = new MixedCollection(null, [
-			Request::class => Request::class,
-		]);
+		$this->services = new MixedCollection(null, config()->services());
 	}
 	
-	public function get(string $name): object {
-		if (! $this->services->containsKey($name) || ! class_exists($name)) {
+	public function get(string $name): mixed {
+		if (! $this->services->containsKey($name)) {
 			throw new NoServiceException(sprintf('Service "%s" does not exist.', $name));
 		}
 		$fqn       = $this->services->get($name);

@@ -2,13 +2,13 @@
 
 declare(strict_types = 1);
 
-namespace Kikopolis\Controller;
+namespace App\Controller;
 
-use Kikopolis\Controller\Concerns\RendersViews;
+use App\Controller\Concerns\RendersViews;
 use Kikopolis\Core\Request;
 use Kikopolis\Core\Response;
 
-class Controller {
+final class Controller {
 	use RendersViews;
 	
 	public function home(): Response {

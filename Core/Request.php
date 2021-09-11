@@ -45,6 +45,14 @@ final class Request {
 		return $this->method;
 	}
 	
+	public function isGet(): bool {
+		return $this->getMethod() === Request::GET;
+	}
+	
+	public function isPost(): bool {
+		return $this->getMethod() === Request::POST;
+	}
+	
 	public function getBody(): array {
 		$body = [];
 		if ($this->getMethod() === Request::GET) {

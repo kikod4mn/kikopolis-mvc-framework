@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/./tests" isTestSource="false" packagePrefix="Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/./Controller" isTestSource="false" packagePrefix="App\Controller\" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phar-io/version" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/instantiator" />
