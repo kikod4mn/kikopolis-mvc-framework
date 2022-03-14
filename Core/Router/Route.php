@@ -21,7 +21,7 @@ final class Route {
 	}
 	
 	private function setParams(array $params): void {
-		if (isset($params['controller']) && isset($params['action'])) {
+		if (isset($params['controller'], $params['action'])) {
 			$this->params = $params;
 		}
 		if (isset($params['template'])) {

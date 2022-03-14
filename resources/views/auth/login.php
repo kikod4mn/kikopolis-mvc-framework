@@ -1,4 +1,4 @@
-@merge(layouts.main)
+@merge(layouts.auth)
 {{ @title(Login Page) }}
 
 <h1>Sign in to the app</h1>

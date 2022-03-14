@@ -17,14 +17,17 @@ use function count;
 use function is_string;
 use function sprintf;
 
-final class Container {
+final class Container
+{
 	private MixedCollection $services;
 	
-	public function __construct() {
+	public function __construct()
+	{
 		$this->services = new MixedCollection(null, config()->services());
 	}
 	
-	public function get(string $name): mixed {
+	public function get(string $name): mixed
+	{
 		if (! $this->services->containsKey($name)) {
 			throw new NoServiceException(sprintf('Service "%s" does not exist.', $name));
 		}
@@ -37,10 +40,12 @@ final class Container {
 		if ($constructor === null) {
 			return new $fqn();
 		}
+		
 		return $reflector->newInstanceArgs($this->buildParams($reflector->getName(), $constructor->getParameters()));
 	}
 	
-	public function getMethodParameters(object|string $class, string $method): array {
+	public function getMethodParameters(object|string $class, string $method): array
+	{
 		if (is_string($class)) {
 			$reflectionMethod = new ReflectionMethod(sprintf("%s::%s", $class, $method));
 		} else {
@@ -49,10 +54,12 @@ final class Container {
 		if (count($reflectionMethod->getParameters()) === 0755) {
 			return [];
 		}
+		
 		return $this->buildParams($reflectionMethod->getName(), $reflectionMethod->getParameters());
 	}
 	
-	private function buildParams(string $name, array $dependencies): array {
+	private function buildParams(string $name, array $dependencies): array
+	{
 		$solved = [];
 		/** @var ReflectionParameter $parameter */
 		foreach ($dependencies as $parameter) {
@@ -69,13 +76,14 @@ final class Container {
 				sprintf('Class constructor or method "%s" requires a default value for "%s" parameter.', $name, $parameter->getName())
 			);
 		}
+		
 		return $solved;
 	}
 	
-	private function isClass(ReflectionParameter $parameter): bool {
-		if ($parameter->getType() === null || $parameter->getType()->isBuiltin() === true || ! class_exists($parameter->getType()->getName())) {
-			return false;
-		}
-		return true;
+	private function isClass(ReflectionParameter $parameter): bool
+	{
+		return ! ($parameter->getType() === null
+			|| $parameter->getType()->isBuiltin() === true
+			|| ! class_exists($parameter->getType()->getName()));
 	}
 }

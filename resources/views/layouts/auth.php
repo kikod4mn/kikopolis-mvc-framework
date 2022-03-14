@@ -7,29 +7,6 @@
 	<title>{{ @title(This is the default title) }}</title>
 </head>
 <body>
-	<nav class="navbar navbar-dark bg-dark">
-		<div class="container-fluid">
-			<a class="navbar-brand" href="/">Navbar</a>
-			<ul class="navbar-nav">
-				<li class="nav-item">
-					<a class="nav-link" href="/">Home</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/register">Register</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/login">Login</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/contact">Contact</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/pricing">Pricing</a>
-				</li>
-			</ul>
-		</div>
-	</nav>
-	
 	<div class="container">
 		{{ @content }}
 	</div>

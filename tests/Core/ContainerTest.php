@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Core;
 
-use Kikopolis\Controller\Controller;
+use App\Controller\Controller;
 use Kikopolis\Core\Container;
 use Kikopolis\Core\Request;
 use PHPUnit\Framework\TestCase;

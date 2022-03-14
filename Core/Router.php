@@ -105,7 +105,7 @@ final class Router implements RouterInterface {
 			} else {
 				// If array with keys, then the key 'controller' value is used.
 				foreach ($params as $key => $value) {
-					if (in_array($key, $this->routeParamNames)) {
+					if (in_array($key, $this->routeParamNames, true)) {
 						if ($key === 'controller') {
 							$result[$key] = $this->controllerNamespace($value);
 						} else {
@@ -165,7 +165,7 @@ final class Router implements RouterInterface {
 	
 	private function parseMethod(string $method): string {
 		$method = strtoupper($method);
-		if (! in_array($method, $this->routeMethods)) {
+		if (! in_array($method, $this->routeMethods, true)) {
 			throw new InvalidRouteMethodException();
 		}
 		return $method;

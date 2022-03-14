@@ -119,7 +119,7 @@ final class Application {
 			}
 			$controller   = $this->getContainer()->get($route->params['controller']);
 			$methodParams = $this->getContainer()->getMethodParameters($controller, $route->params['action']) ?? [];
-			return call_user_func([$controller, $route->params['action']], $methodParams);
+			return call_user_func([$controller, $route->params['action']], ...$methodParams);
 		}
 		if (isset($route->template)) {
 			return (new Response())->setContent($this->view->render($route->template));

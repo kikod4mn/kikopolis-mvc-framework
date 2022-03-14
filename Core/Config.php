@@ -54,9 +54,9 @@ final class Config {
 				&& class_exists('App\\' . mb_strcut($pathname, mb_strpos($pathname, 'Controller'))) === false
 			) {
 				$classname = str_replace('.php', '', 'App\\' . mb_strcut($pathname, mb_strpos($pathname, 'Controller')));
-				if (class_exists($classname) === false) {
-					require_once $pathname;
-				}
+//				if (class_exists($classname) === false) {
+//					require_once $pathname;
+//				}
 				$loaded[$classname] = $classname;
 			}
 			if (FileSystem::isDirectory($pathname)) {
