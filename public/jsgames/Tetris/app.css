@@ -1,0 +1,136 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+:root {
+    --black              : #1d1d1d;
+    --grey               : #647687;
+    --white              : #f1f1f1;
+    --red                : #ee1111;
+    --dark-red           : #b91d47;
+    --blue               : #2d89ef;
+    --dark-blue          : #2b5797;
+    --yellow             : #ffc40d;
+    --orange             : #f2552c;
+    --green              : #60a917;
+    --dark-green         : #008a00;
+    --pink               : #ff0097;
+    --purple             : #9f00a7;
+    --default-box-shadow : 0 0.5rem 1rem rgba(45, 45, 45, 0.5);
+    }
+
+*, ::after, ::before {
+    box-sizing : border-box;
+    margin     : 0;
+    padding    : 0;
+    }
+
+html {
+    font-size : 62.5%;
+    }
+
+body {
+    background-color : var(--blue);
+    color            : var(--white);
+    font-family      : "Roboto", sans-serif;
+    min-height       : 100vh;
+    display          : flex;
+    flex-direction   : column;
+    align-items      : center;
+    justify-content  : center;
+    }
+
+.game {
+    width : 50%;
+    }
+
+canvas {
+    border     : solid 0.3rem var(--white);
+    box-shadow : 0 0 3rem rgba(255, 255, 255, 0.5);
+    }
+
+canvas#tetris {
+    height : 85vh;
+    }
+
+.button {
+    min-width       : 10rem;
+    height          : 3rem;
+    font-size       : 2rem;
+    font-family     : inherit;
+    letter-spacing  : 0.01rem;
+    text-align      : center;
+    text-decoration : none;
+    text-transform  : uppercase;
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    transition      : 0.2s ease;
+    margin          : 2rem auto;
+    line-height     : 2rem;
+    background      : transparent;
+    cursor          : pointer;
+    padding         : 2rem 4rem;
+    }
+
+.button {
+    color  : var(--black);
+    border : 1px solid var(--black);
+    }
+
+.button:hover {
+    color      : var(--white);
+    background : var(--black);
+    border     : 1px solid var(--black);
+    }
+
+.messages {
+    display          : flex;
+    flex-direction   : column;
+    align-items      : center;
+    justify-content  : center;
+    width            : 80vw;
+    min-height       : 6rem;
+    font-size        : 2rem;
+    padding          : 2rem 3rem;
+    margin           : 1.5rem auto;
+    box-shadow       : var(--default-box-shadow);
+    background-color : var(--black);
+    border-radius    : 0.4rem;
+    color            : var(--white);
+    border           : 1px solid var(--white);
+    text-align       : center;
+    }
+
+.message {
+    display : block;
+    width   : 100%;
+    margin  : 1.5rem auto;
+    }
+
+.game {
+    display        : flex;
+    flex-direction : row;
+    }
+
+.left {
+    width : 60vw;
+    }
+
+.right {
+    display         : flex;
+    flex-direction  : column;
+    align-items     : flex-end;
+    justify-content : center;
+    width           : 35vw;
+    }
+
+.right h3 {
+    text-align     : right;
+    font-size      : 2rem;
+    padding-bottom : 2rem;
+    }
+
+.score {
+    padding        : 0 0 3rem 3rem;
+    text-transform : uppercase;
+    font-size      : 3rem;
+    }

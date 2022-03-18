@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>High Low Card Game</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+	<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<h4>Game is not mobile ready and responsive. Desktop needed for this.</h4>
+<h1>HI LOW Card Game in Javascript</h1>
+<h2>Streak: <span id="score" class="score"></span></h2>
+<div id="message" class="message">&nbsp;</div>
+<div id="result" class="result invisible">&nbsp;</div>
+<div class="buttons">
+	<button id="startGame" class="button">Start</button>
+	<button id="restartGame" class="button hidden restart__button">Re-start</button>
+	<button id="predictHigher" class="button button__higher hidden">Higher</button>
+	<button id="predictLower" class="button button__lower hidden">Lower</button>
+</div>
+<div id="playArea" class="cards__in__play"></div>
+<div id="playedDeckArea" class="cards__in__deck"></div>
+<script type="text/javascript" src="app.js"></script>
+</body>
+</html>

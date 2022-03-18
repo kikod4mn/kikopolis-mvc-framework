@@ -2,6 +2,7 @@
 
 declare(strict_types = 1);
 
+use Kikopolis\Core\Cache\Cache;
 use Kikopolis\Core\Request;
 use Kikopolis\Core\Response;
 use Kikopolis\Core\Router;
@@ -17,4 +18,6 @@ return [
 	View::class               => View::class,
 	'template_loader'         => TemplateFileLoader::class,
 	TemplateFileLoader::class => TemplateFileLoader::class,
+	'cache'                   => Cache::class,
+	Cache::class              => Cache::class,
 ];

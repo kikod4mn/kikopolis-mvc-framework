@@ -6,42 +6,51 @@ namespace Kikopolis\Core;
 
 use FilesystemIterator;
 use Kikopolis\Core\Collection\Collection;
-use Kikopolis\Core\Collection\MixedCollection;
 use Kikopolis\Core\Collection\StringCollection;
 use Kikopolis\Support\FileSystem;
 use function array_merge;
 use function class_exists;
-use function dd;
 use function mb_strcut;
 use function mb_strpos;
 use function sprintf;
 use function str_contains;
 use function str_replace;
-use function trim;
 use const DIRECTORY_SEPARATOR;
 
 final class Config {
-	private static Collection $services;
+	public const ENVIRONMENT = 'environment';
+	public const DEBUG       = 'debug';
+	
+	private Collection $services;
+	private array      $config;
+	
+	public function __construct() {
+		$this->config = require sprintf("%s%sconfig%sconfig.php", Application::getProjectPath(), DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR);
+	}
 	
 	public function services(): array {
-		if (isset(self::$services) === false) {
-			$configured     = require_once Application::getProjectPath() . '/config/services.php';
+		if (isset($this->services) === false) {
+			$configured     = require sprintf("%s/config/services.php", Application::getProjectPath());
 			$controllers    = $this->loadControllers(sprintf("%s%s%s", Application::getProjectPath(), DIRECTORY_SEPARATOR, 'Controller'));
-			self::$services = new StringCollection(array_merge($controllers, $configured));
+			$this->services = new StringCollection(array_merge($controllers, $configured));
 		}
-		return self::$services->toArray();
+		return $this->services->toArray();
 	}
 	
 	public function loadRoutes(): void {
-		require_once Application::getProjectPath() . '/routes/routes.php';
-	}
-	
-	public static function self(): Config {
-		return new self();
+		require_once sprintf("%s%sroutes%sroutes.php", Application::getProjectPath(), DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR);
 	}
 	
 	public static function controllerNamespace(): string {
 		return 'App\\Controller\\';
+	}
+	
+	public function isDevelopment(): bool {
+		return array_key_exists(self::ENVIRONMENT, $this->config) && $this->config[self::ENVIRONMENT] === true;
+	}
+	
+	public function displayErrors(): bool {
+		return array_key_exists(self::DEBUG, $this->config) && $this->config[self::DEBUG] === true;
 	}
 	
 	private function loadControllers(string $path): array {
@@ -53,10 +62,10 @@ final class Config {
 				&& str_contains($file->getBasename(), '.php') === true
 				&& class_exists('App\\' . mb_strcut($pathname, mb_strpos($pathname, 'Controller'))) === false
 			) {
-				$classname = str_replace('.php', '', 'App\\' . mb_strcut($pathname, mb_strpos($pathname, 'Controller')));
-//				if (class_exists($classname) === false) {
-//					require_once $pathname;
-//				}
+				$classname = str_replace(['.php', '/'], ['', '\\'], sprintf('App\%s', mb_strcut($pathname, mb_strpos($pathname, 'Controller'))));
+				//				if (class_exists($classname) === false) {
+				//					require_once $pathname;
+				//				}
 				$loaded[$classname] = $classname;
 			}
 			if (FileSystem::isDirectory($pathname)) {

@@ -45,6 +45,6 @@ if (! function_exists('view')) {
 
 if (! function_exists('config')) {
 	function config(): Config {
-		return Config::self();
+		return app()->getConfig();
 	}
 }

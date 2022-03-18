@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Rock Paper Scissors</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+	<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="header">
+	<h1>| Rock | Paper | Scissors |</h1>
+	<div id="score" class="score">
+		<h4>Your score <span id="playerScore" class="player__score"></span></h4>
+		<h4>Computer score <span id="cpuScore" class="cpu__score"></span></h4>
+	</div>
+</header>
+<main id="main" class="main game__area">
+	<!-- Player and Cpu choice renders -->
+	<div class="choice__render">
+		<div id="playerChoice" class="choice player__choice">
+			<h4>You chose</h4>
+			<span id="playerChoiceSpan">&nbsp;</span>
+		</div>
+		<div id="cpuChoice" class="choice cpu__choice">
+			<h4>Computer chose</h4>
+			<span id="cpuChoiceSpan">&nbsp;</span>
+		</div>
+	</div>
+	<!-- Player and Cpu choice renders -->
+	<div id="controls" class="controls">
+		<!-- CPU choice animation rollers -->
+		<div class="casino__roll--wrapper hidden">
+			<span class="casino__roll"><i class="fas fa-gem"></i></span>
+			<span class="casino__roll"><i class="fas fa-scroll"></i></span>
+			<span class="casino__roll"><i class="fas fa-cut"></i></span>
+		</div>
+		<div class="casino__roll--wrapper hidden">
+			<span class="casino__roll"><i class="fas fa-gem"></i></span>
+			<span class="casino__roll"><i class="fas fa-scroll"></i></span>
+			<span class="casino__roll"><i class="fas fa-cut"></i></span>
+		</div>
+		<div class="casino__roll--wrapper hidden">
+			<span class="casino__roll"><i class="fas fa-gem"></i></span>
+			<span class="casino__roll"><i class="fas fa-scroll"></i></span>
+			<span class="casino__roll"><i class="fas fa-cut"></i></span>
+		</div>
+		<!-- CPU choice animation rollers -->
+		<!-- Game choice buttons -->
+		<button id="rock" class="button game__button rock">
+			<i class="fas fa-gem"></i><span class="text">rock</span>
+		</button>
+		<button id="paper" class="button game__button paper">
+			<i class="fas fa-scroll"></i><span class="text">paper</span>
+		</button>
+		<button id="scissors" class="button game__button scissors">
+			<i class="fas fa-cut"></i><span class="text">scissors</span>
+		</button>
+		<!-- Game choice buttons -->
+		<!-- Game controls -->
+		<button id="tryAgain" class="button game__button try__again__button hidden">
+			<i class=" fas fa-dice"></i><span class="text">try again</span>
+		</button>
+		<button id="resetGame" class="button game__button reset__game__button hidden">
+			<i class=" fas fa-redo"></i><span class="text">reset game</span>
+		</button>
+		<!-- Game controls -->
+	</div>
+</main>
+<footer class="footer">
+	<div id="message" class="messages"></div>
+</footer>
+<script type="text/javascript" src="app.js"></script>
+</body>
+</html>

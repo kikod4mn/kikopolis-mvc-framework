@@ -1,0 +1,226 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+:root {
+	--black: #1d1d1d;
+	--light-pink: #fce9ff;
+	--grey: #647687;
+	--white: #f1f1f1;
+	--red: #ee1111;
+	--dark-red: #b91d47;
+	--blue: #2d89ef;
+	--dark-blue: #2b5797;
+	--yellow: #ffc40d;
+	--orange: #f2552c;
+	--green: #60a917;
+	--dark-green: #008a00;
+	--pink: #ff0097;
+	--purple: #9f00a7;
+	--default-box-shadow: 0 0.5rem 1rem rgba(45, 45, 45, 0.5);
+	}
+
+*, ::after, ::before {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	}
+
+html {
+	font-size: 62.5%;
+	}
+
+body {
+	font-family: 'Roboto', sans-serif;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	}
+
+.app {
+	background-color: var(--light-pink);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100vw;
+	height: 100vh;
+	}
+
+.button {
+	min-width: 10rem;
+	height: 3rem;
+	font-size: 2rem;
+	font-family: inherit;
+	letter-spacing: 0.01rem;
+	text-align: center;
+	text-decoration: none;
+	text-transform: uppercase;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: 0.2s ease;
+	margin: 2rem auto;
+	line-height: 2rem;
+	background: transparent;
+	cursor: pointer;
+	padding: 2rem 4rem;
+	}
+
+.button {
+	color: var(--black);
+	border: 1px solid var(--black);
+	}
+
+.button:hover {
+	color: var(--white);
+	background: var(--black);
+	border: 1px solid var(--black);
+	}
+
+.button.start {
+	color: var(--pink);
+	border: 1px solid var(--pink);
+	}
+
+.button.start:hover {
+	color: var(--white);
+	background: var(--pink);
+	border: 1px solid var(--pink);
+	}
+
+.button.reset {
+	color: var(--purple);
+	border: 1px solid var(--purple);
+	}
+
+.button.reset:hover {
+	color: var(--white);
+	background: var(--purple);
+	border: 1px solid var(--purple);
+	}
+
+.messages {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 80vw;
+	min-height: 6rem;
+	font-size: 2rem;
+	padding: 2rem 3rem;
+	margin: 1.5rem auto;
+	box-shadow: var(--default-box-shadow);
+	background-color: var(--black);
+	border-radius: 0.4rem;
+	color: var(--white);
+	border: 1px solid var(--white);
+	text-align: center;
+	}
+
+.message {
+	display: block;
+	width: 100%;
+	margin: 1.5rem auto;
+	}
+
+.game__header {
+	width: 75vw;
+	}
+
+.game__board {
+	margin: 3rem auto 1rem;
+	box-shadow: var(--default-box-shadow);
+	height: 1px;
+	overflow: hidden;
+	transition: height 0.1s ease-in-out;
+	}
+
+.game__board.expanded {
+	height: 40rem;
+	}
+
+.controls {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	width: 40vw;
+	margin: 0 auto;
+	}
+
+.stats {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--dark-blue);
+	color: var(--white);
+	padding: 3rem 6rem;
+	box-shadow: var(--default-box-shadow);
+	}
+
+.score {
+	font-size: 2.5rem;
+	text-transform: uppercase;
+	margin: 1rem 3rem;
+	}
+
+.lives {
+	font-size: 2.5rem;
+	text-transform: uppercase;
+	margin: 1rem 4rem;
+	}
+
+.square__row {
+	display: flex;
+	}
+
+.square {
+	background: linear-gradient(180deg, var(--dark-red) 0%, var(--red) 100%);
+	border: 0.1rem solid var(--white);
+	color: var(--white);
+	width: 10rem;
+	height: 10rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	font-size: 2.5rem;
+	font-family: fantasy;
+	border-radius: 0.4rem;
+	transition: all 0.2s ease-in-out;
+	cursor: pointer;
+	}
+
+.square:hover {
+	background: linear-gradient(180deg, var(--purple) 0%, var(--pink) 100%);
+	transform: scale(1.05);
+	box-shadow: inset 0 0 20px var(--orange);
+	}
+
+.square.popped {
+	background: linear-gradient(180deg, var(--purple) 0%, var(--pink) 100%);
+	border: 0.3rem solid var(--white);
+	box-shadow: var(--default-box-shadow);
+	}
+
+.square.popped.animate {
+	animation: pop 1s ease-in-out;
+	}
+
+@keyframes pop {
+	0% {
+		transform: scale(1);
+		}
+	10% {
+		transform: scale(1.5);
+		}
+	15% {
+		transform: scale(1.2);
+		}
+	50% {
+		transform: scale(1);
+		}
+	100% {
+		transform: scale(1);
+		}
+	}

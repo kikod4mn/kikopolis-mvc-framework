@@ -28,11 +28,11 @@ use function strpos;
 use function strtoupper;
 
 final class Router implements RouterInterface {
-	const GET    = 'GET';
-	const POST   = 'POST';
-	const PUT    = 'PUT';
-	const PATCH  = 'PATCH';
-	const DELETE = 'DELETE';
+	public const GET    = 'GET';
+	public const POST   = 'POST';
+	public const PUT    = 'PUT';
+	public const PATCH  = 'PATCH';
+	public const DELETE = 'DELETE';
 	
 	private Collection $routes;
 	private array      $routeParamNames = ['controller', 'action'];
@@ -75,7 +75,7 @@ final class Router implements RouterInterface {
 				$matched = $route;
 			}
 		}
-//		$route = $this->routes[$request->getMethod()][$this->removeQueryVariables($request)] ?? null;
+		//		$route = $this->routes[$request->getMethod()][$this->removeQueryVariables($request)] ?? null;
 		if ($matched === null) {
 			throw new NoRouteMatchException();
 		}
@@ -92,25 +92,23 @@ final class Router implements RouterInterface {
 			if (str_contains($params, '@')) {
 				$pos = strpos($params, '@');
 				return ['controller' => $this->controllerNamespace(mb_strcut($params, 0, $pos)), 'action' => mb_strcut($params, $pos + 1, mb_strlen($params))];
-			} else {
-				// Allow to call a name of the template to render if it exists
-				return ['template' => $params];
 			}
+			// Allow to call a name of the template to render if it exists
+			return ['template' => $params];
+		}
+		if (Arr::associative($params)) {
+			// For an associative array, ASSUME key 0 is controller and 1 is action.
+			// Associative array currently does not support any other parameters.
+			$result['controller'] = $this->controllerNamespace(array_shift($params));
+			$result['action']     = array_shift($params);
 		} else {
-			if (Arr::associative($params)) {
-				// For an associative array, ASSUME key 0 is controller and 1 is action.
-				// Associative array currently does not support any other parameters.
-				$result['controller'] = $this->controllerNamespace(array_shift($params));
-				$result['action']     = array_shift($params);
-			} else {
-				// If array with keys, then the key 'controller' value is used.
-				foreach ($params as $key => $value) {
-					if (in_array($key, $this->routeParamNames, true)) {
-						if ($key === 'controller') {
-							$result[$key] = $this->controllerNamespace($value);
-						} else {
-							$result[$key] = $value;
-						}
+			// If array with keys, then the key 'controller' value is used.
+			foreach ($params as $key => $value) {
+				if (in_array($key, $this->routeParamNames, true)) {
+					if ($key === 'controller') {
+						$result[$key] = $this->controllerNamespace($value);
+					} else {
+						$result[$key] = $value;
 					}
 				}
 			}

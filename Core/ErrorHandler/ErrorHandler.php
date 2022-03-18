@@ -5,11 +5,9 @@ declare(strict_types = 1);
 namespace Kikopolis\Core\ErrorHandler;
 
 use ErrorException;
-use Exception;
 use Kikopolis\Core\Application;
 use Throwable;
 use function date;
-use function dirname;
 use function error_log;
 use function error_reporting;
 use function get_class;
@@ -24,13 +22,12 @@ final class ErrorHandler {
 	}
 	
 	public static function exceptionHandler(Throwable $exception): void {
-		// Code 404 not found, else 500 general error
 		$code = $exception->getCode();
-		if ($code != 404) {
+		if ($code !== 404) {
 			$code = 500;
 		}
 		http_response_code($code);
-		if (Application::isDebug()) {
+		if (config()->isDevelopment() && config()->displayErrors()) {
 			echo "<h1>Fatal error</h1>";
 			echo "<p>Uncaught exception: '" . get_class($exception) . "'</p>";
 			echo "<p>Message: '" . $exception->getMessage() . "'</p>";

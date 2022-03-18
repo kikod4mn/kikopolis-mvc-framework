@@ -1,0 +1,222 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+:root {
+	--black: #1d1d1d;
+	--grey: #647687;
+	--white: #f1f1f1;
+	--red: #ee1111;
+	--dark-red: #b91d47;
+	--blue: #2d89ef;
+	--dark-blue: #2b5797;
+	--yellow: #ffc40d;
+	--orange: #f2552c;
+	--green: #60a917;
+	--dark-green: #008a00;
+	--pink: #ff0097;
+	--purple: #9f00a7;
+	--default-box-shadow: 0 0.5rem 1rem rgba(45, 45, 45, 0.5);
+	}
+
+*, ::after, ::before {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	}
+
+html {
+	font-size: 62.5%;
+	}
+
+body {
+	font-family: 'Lato', sans-serif;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	}
+
+.button {
+	min-width: 10rem;
+	height: 3rem;
+	font-size: 2rem;
+	font-family: inherit;
+	letter-spacing: 0.01rem;
+	text-align: center;
+	text-decoration: none;
+	text-transform: uppercase;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: 0.2s ease;
+	margin: 2rem auto;
+	line-height: 2rem;
+	background: transparent;
+	cursor: pointer;
+	padding: 2rem 4rem;
+	}
+
+.button {
+	color: var(--black);
+	border: 1px solid var(--black);
+	}
+
+.button:hover {
+	color: var(--white);
+	background: var(--black);
+	border: 1px solid var(--black);
+	}
+
+.messages {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 80vw;
+	min-height: 6rem;
+	font-size: 2rem;
+	padding: 2rem 3rem;
+	margin: 1.5rem auto;
+	box-shadow: var(--default-box-shadow);
+	background-color: var(--black);
+	border-radius: 0.4rem;
+	color: var(--white);
+	border: 1px solid var(--white);
+	text-align: center;
+	}
+
+.message {
+	display: block;
+	width: 100%;
+	margin: 1.5rem auto;
+	}
+
+.main {
+	position: relative;
+	width: 100vw;
+	height: 100vh;
+	background-color: var(--blue);
+	}
+
+.instructions {
+	margin: 4rem auto;
+	padding: 6rem;
+	background-color: var(--red);
+	color: var(--white);
+	position: absolute;
+	border-radius: 0.3rem;
+	top: 12rem;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 999999;
+	}
+
+.instructions__heading {
+	text-transform: uppercase;
+	font-size: 3rem;
+	white-space: nowrap;
+	}
+
+.instructions__subheading {
+	width: 100%;
+	text-align: center;
+	text-transform: uppercase;
+	font-size: 3rem;
+	color: var(--yellow);
+	animation: arcadePulse 2s linear infinite;
+	}
+
+.instructions__paragraph {
+	margin-top: 4rem;
+	font-size: 2rem;
+	text-align: center;
+	}
+
+.game {
+	position: relative;
+	width: 650px;
+	}
+
+.road, .game {
+	height: 100%;
+	margin: 0 auto;
+	padding: 0;
+	}
+
+.road {
+	position: relative;
+	width: 100%;
+	height: 100vh;
+	background-color: var(--black);
+	overflow: hidden;
+	z-index: 999995;
+	}
+
+.roadline {
+	position: absolute;
+	background-color: white;
+	margin-left: 50%;
+	width: 10px;
+	height: 150px;
+	z-index: 999996;
+	}
+
+.car {
+	position: absolute;
+	bottom: 10vh;
+	left: 27vw;
+	width: 100px;
+	height: 200px;
+	background-color: var(--red);
+	z-index: 999999;
+	}
+
+.car.enemy {
+	z-index: 999998;
+	}
+
+.score {
+	position: absolute;
+	top: 50%;
+	left: -40%;
+	text-transform: uppercase;
+	color: var(--white);
+	font-size: 3rem;
+	}
+
+.gameover {
+	margin: 4rem auto;
+	padding: 6rem;
+	background-color: var(--red);
+	color: var(--white);
+	position: absolute;
+	border-radius: 0.3rem;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	text-transform: uppercase;
+	font-size: 3rem;
+	animation: arcadePulse 2s linear infinite;
+	z-index: 1999999;
+	}
+
+.hidden {
+	display: none;
+	}
+
+@keyframes arcadePulse {
+	0% {
+		color: var(--yellow);
+		}
+	33% {
+		color: var(--blue);
+		}
+	66% {
+		color: var(--green);
+		}
+	100% {
+		color: var(--yellow);
+		}
+	}

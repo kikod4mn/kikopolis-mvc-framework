@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^kristo.tech$ [NC,OR]
+RewriteCond %{HTTP_HOST} ^www.kristo.tech
+RewriteCond %{REQUEST_URI} !public/
+RewriteRule ^$ public/ [L]
+RewriteRule (.*) public/$1 [L]

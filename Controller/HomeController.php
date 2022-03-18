@@ -8,11 +8,15 @@ use App\Controller\Concerns\RendersViews;
 use Kikopolis\Core\Request;
 use Kikopolis\Core\Response;
 
-final class Controller {
+final class HomeController {
 	use RendersViews;
 	
 	public function home(): Response {
-		return $this->render('home', ['name' => 'Kristo Leas']);
+		return $this->render('home');
+	}
+	
+	public function games(): Response {
+		return $this->render('games');
 	}
 	
 	public function contact(): Response {
